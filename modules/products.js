@@ -14,13 +14,18 @@ const Product = sequelize.define("product", {
     allowNull: false,
     unique: true,
   },
+  Description: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
   Image: {
     type: Sequelize.STRING,
     allowNull: true,
   },
-  pdf:{
+  pdf: {
     type: Sequelize.STRING,
-    allowNull : true
-  }
+    allowNull: true,
+  },
 });
 module.exports = Product;

@@ -35,7 +35,7 @@ router.post(
 //delete from products
 router.post("/deleteProducts", products.deleteProducts);
 //update products
-router.post("/updateProducts", products.updateProducts);
+router.post("/updateProducts", upload, products.updateProducts);
 //select from where name = ""
 router.get("/searchProducts/:nameProduct", products.searchProducts);
 //select from product where id = ""
