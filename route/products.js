@@ -10,5 +10,5 @@ router.post("/deleteProducts",products.deleteProducts);
 //update products 
 router.post("/updateProducts",products.updateProducts);
 //select from where name = ""
-router.get("/searchProducts",products.searchProducts);
+router.get("/searchProducts/:nameProduct",products.searchProducts);
 module.exports = router;
