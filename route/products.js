@@ -38,4 +38,6 @@ router.post("/deleteProducts", products.deleteProducts);
 router.post("/updateProducts", products.updateProducts);
 //select from where name = ""
 router.get("/searchProducts/:nameProduct", products.searchProducts);
+//select from product where id = ""
+router.get("/product",products.getOneProduct);
 module.exports = router;

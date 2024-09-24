@@ -73,3 +73,13 @@ module.exports.searchProducts = async (req, res, _next) => {
       res.status(404).json(err);
     });
 };
+module.exports.getOneProduct = async (req,res,_next)=>{
+    const prodId = req.body.productId;
+    await Products.findAll({where:{id : prodId}})
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      res.status(404).json(err);
+    });
+}
