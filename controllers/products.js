@@ -34,42 +34,34 @@ module.exports.updateProducts = async (req, res, _next) => {
   const prodId = req.body.prodId;
   const name = req.body.name;
   const Description = req.body.Description;
-  const image = req.files.image
-    ? req.files.image[0].filename
-    : req.file.filename;
+  const image = req.files.image ? req.files.image[0].filename : req.file.filename;
   const pdf = req.files.pdf ? req.files.pdf[0].filename : req.file.filename;
   await Products.findOne({ where: { id: prodId } })
-    .then(async (product) => {
-      const imagePath = product.image
-        ? path.join(__dirname, "..", "public/images/", product.image)
-        : null;
+  .then(async (product) => {
+  const imagePath = product.image ? path.join(__dirname, "..", "public/images/", product.image) : null;
+  console.log(imagePath);
+  console.log(path.join(__dirname, "..", "public/images/", product.image));
       if (imagePath && imagePath !== image) {
         console.log("Updated Image");
         if (fs.existsSync(imagePath)) {
           fs.unlinkSync(imagePath); // Delete old image if it exists
         }
-        await product.update({ image });
       }
-      // Handle PDF update
-      const pdfPath = product.pdf
-        ? path.join(__dirname, "..", "public/documents/", product.pdf)
-        : null;
+      const pdfPath = product.pdf ? path.join(__dirname, "..", "Document/", product.pdf) : null;
       if (pdfPath && pdfPath !== pdf) {
         console.log("Updated PDF");
         if (fs.existsSync(pdfPath)) {
-          fs.unlinkSync(pdfPath); // Delete old PDF if it exists
+          fs.unlinkSync(pdfPath);
         }
-        await product.update({ pdf });
       }
-      await product.update({
-        name,
-        Description,
-        Image: image,
-        pdf: pdf,
-      });
-      res
-        .status(200)
-        .json({ message: "Product updated successfully", product });
+      product.name=name;
+      product.Description=Description;
+      product.Image=image;
+      product.pdf=pdf;
+      console.log("Ahmad62");
+      await product.save();
+    }).then(()=>{
+      res.status(200).json({message: "Product updated successfully"});
     })
     .catch((err) => {
       res.status(404).json(err);

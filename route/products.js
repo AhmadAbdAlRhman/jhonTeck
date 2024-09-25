@@ -57,4 +57,5 @@ router.post(
 router.get("/searchProducts/:nameProduct", products.searchProducts);
 //select from product where id = ""
 router.get("/product", products.getOneProduct);
+console.log(path.join(__dirname, "..", "public/images/", ));
 module.exports = router;
