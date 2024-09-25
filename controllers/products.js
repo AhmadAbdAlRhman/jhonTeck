@@ -35,37 +35,48 @@ module.exports.updateProducts = async (req, res, _next) => {
   const prodId = req.body.prodId;
   const name = req.body.name;
   const Description = req.body.Description;
-  const image = req.files.image ? req.files.image[0].filename : req.file.filename;
+  const image = req.files.image
+    ? req.files.image[0].filename
+    : req.file.filename;
   const pdf = req.files.pdf ? req.files.pdf[0].filename : req.file.filename;
-  await Products.findOne({ where: { id: prodId } })
-  .then(async (product) => {
-    const imagePath = product.Image ? path.join(__dirname, "..", "public/images/", product.Image) : null;
+  try {
+    let product = await Products.findOne({ where: { id: prodId } });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     if (imagePath && product.Image !== image) {
-      console.log("Updated Image");
+      const imagePath = path.join(
+        __dirname,
+        "..",
+        "public/images/",
+        product.Image
+      );
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);
+        console.log("Old image deleted");
       }
     }
-    const pdfPath = product.pdf ? path.join(__dirname, "..", "public/Document/", product.pdf) : null;
-    console.log(pdfPath);
-    console.log(pdf);
     if (pdfPath && product.pdf !== pdf) {
-      console.log("Updated PDF");
+      const pdfPath = path.join(
+        __dirname,
+        "..",
+        "public/Document/",
+        product.pdf
+      );
       if (fs.existsSync(pdfPath)) {
         fs.unlinkSync(pdfPath);
+        console.log("Old PDF deleted");
       }
     }
-    product.name=name;
-    product.Description=Description;
-    product.Image=image;
-    product.pdf=pdf;
+    product.name = name;
+    product.Description = Description;
+    product.Image = image;
+    product.pdf = pdf;
     await product.save();
-    }).then(()=>{
-      res.status(200).json({message: "Product updated successfully"});
-    })
-    .catch((err) => {
-      res.status(404).json(err);
-    });
+    res.status(200).json({ message: "Product updated successfully" });
+  } catch (err) {
+    res.status(404).json(err);
+  }
 };
 module.exports.deleteProducts = async (req, res, _next) => {
   const prodId = req.body.productId;
