@@ -38,16 +38,14 @@ module.exports.updateProducts = async (req, res, _next) => {
   const pdf = req.files.pdf ? req.files.pdf[0].filename : req.file.filename;
   await Products.findOne({ where: { id: prodId } })
   .then(async (product) => {
-  const imagePath = product.image ? path.join(__dirname, "..", "public/images/", product.image) : null;
-  console.log(imagePath);
-  console.log(path.join(__dirname, "..", "public/images/", product.image));
-      if (imagePath && imagePath !== image) {
-        console.log("Updated Image");
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath); // Delete old image if it exists
+    const imagePath = product.image ? path.join(__dirname, "..", "public/images/", product.Image) : null;
+    if (imagePath && imagePath !== image) {
+      console.log("Updated Image");
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); // Delete old image if it exists
         }
       }
-      const pdfPath = product.pdf ? path.join(__dirname, "..", "Document/", product.pdf) : null;
+      const pdfPath = product.pdf ? path.join(__dirname, "..", "public/Document/", product.pdf) : null;
       if (pdfPath && pdfPath !== pdf) {
         console.log("Updated PDF");
         if (fs.existsSync(pdfPath)) {
@@ -58,7 +56,6 @@ module.exports.updateProducts = async (req, res, _next) => {
       product.Description=Description;
       product.Image=image;
       product.pdf=pdf;
-      console.log("Ahmad62");
       await product.save();
     }).then(()=>{
       res.status(200).json({message: "Product updated successfully"});
