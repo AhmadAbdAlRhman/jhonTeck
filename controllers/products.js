@@ -1,5 +1,6 @@
 const Products = require("../modules/products");
 const { Sequelize, Op } = require("sequelize");
+const path = require("path");
 module.exports.getProducts = async (_req, res, _next) => {
   await Products.findAll()
     .then((result) => {
@@ -38,15 +39,19 @@ module.exports.updateProducts = async (req, res, _next) => {
   const pdf = req.files.pdf ? req.files.pdf[0].filename : req.file.filename;
   await Products.findOne({ where: { id: prodId } })
   .then(async (product) => {
-    const imagePath = product.image ? path.join(__dirname, "..", "public/images/", product.Image) : null;
-    if (imagePath && imagePath !== image) {
+    const imagePath = product.Image ? path.join(__dirname, "..", "public/images/", product.Image) : null;
+     console.log("43 => "+imagePath);
+     console.log("44 => "+image);
+    if (imagePath && product.Image !== image) {
       console.log("Updated Image");
       if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath); // Delete old image if it exists
-        }
+        fs.unlinkSync(imagePath);
       }
+    }
       const pdfPath = product.pdf ? path.join(__dirname, "..", "public/Document/", product.pdf) : null;
-      if (pdfPath && pdfPath !== pdf) {
+      console.log(pdfPath);
+      console.log(pdf);
+      if (pdfPath && product.pdf !== pdf) {
         console.log("Updated PDF");
         if (fs.existsSync(pdfPath)) {
           fs.unlinkSync(pdfPath);
