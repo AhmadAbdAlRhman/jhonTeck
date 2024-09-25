@@ -40,28 +40,26 @@ module.exports.updateProducts = async (req, res, _next) => {
   await Products.findOne({ where: { id: prodId } })
   .then(async (product) => {
     const imagePath = product.Image ? path.join(__dirname, "..", "public/images/", product.Image) : null;
-     console.log("43 => "+imagePath);
-     console.log("44 => "+image);
     if (imagePath && product.Image !== image) {
       console.log("Updated Image");
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);
       }
     }
-      const pdfPath = product.pdf ? path.join(__dirname, "..", "public/Document/", product.pdf) : null;
-      console.log(pdfPath);
-      console.log(pdf);
-      if (pdfPath && product.pdf !== pdf) {
-        console.log("Updated PDF");
-        if (fs.existsSync(pdfPath)) {
-          fs.unlinkSync(pdfPath);
-        }
+    const pdfPath = product.pdf ? path.join(__dirname, "..", "public/Document/", product.pdf) : null;
+    console.log(pdfPath);
+    console.log(pdf);
+    if (pdfPath && product.pdf !== pdf) {
+      console.log("Updated PDF");
+      if (fs.existsSync(pdfPath)) {
+        fs.unlinkSync(pdfPath);
       }
-      product.name=name;
-      product.Description=Description;
-      product.Image=image;
-      product.pdf=pdf;
-      await product.save();
+    }
+    product.name=name;
+    product.Description=Description;
+    product.Image=image;
+    product.pdf=pdf;
+    await product.save();
     }).then(()=>{
       res.status(200).json({message: "Product updated successfully"});
     })
