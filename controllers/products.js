@@ -1,6 +1,25 @@
 const Products = require("../modules/products");
 const { Sequelize, Op } = require("sequelize");
 const path = require("path");
+// const util = require("util");
+const fs = require("fs");
+const rimraf = require("rimraf").default;
+async function deleteImage(imagePath) {
+  try {
+    await fs.unlinkSync(imagePath); // Now this will work with the old version
+    console.log("Old image deleted");
+  } catch (err) {
+    console.error("Failed to delete image:", err);
+  }
+}
+async function deletePdf(pdfPath) {
+  try {
+    await fs.unlinkSync(pdfPath); // Now this will work with the old version
+    console.log("Old image deleted");
+  } catch (err) {
+    console.error("Failed to delete image:", err);
+  }
+}
 module.exports.getProducts = async (_req, res, _next) => {
   await Products.findAll()
     .then((result) => {
@@ -44,29 +63,26 @@ module.exports.updateProducts = async (req, res, _next) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    if (imagePath && product.Image !== image) {
+    if (product.Image !== image) {
+      console.log("Both the image is not similar");
       const imagePath = path.join(
         __dirname,
         "..",
         "public/images/",
         product.Image
       );
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
-        console.log("Old image deleted");
-      }
+      console.log("Ahmad56");
+      await deleteImage(imagePath);
+      console.log("Najeeb64");
     }
-    if (pdfPath && product.pdf !== pdf) {
+    if (product.pdf !== pdf) {
       const pdfPath = path.join(
         __dirname,
         "..",
         "public/Document/",
         product.pdf
       );
-      if (fs.existsSync(pdfPath)) {
-        fs.unlinkSync(pdfPath);
-        console.log("Old PDF deleted");
-      }
+      await deletePdf(pdfPath);
     }
     product.name = name;
     product.Description = Description;
