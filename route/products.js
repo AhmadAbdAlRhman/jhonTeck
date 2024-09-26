@@ -42,7 +42,7 @@ router.post(
 );
 
 //delete from products
-router.post("/deleteProducts", products.deleteProducts);
+router.post("/deleteProducts/:productId", products.deleteProducts);
 //update products
 router.post(
   "/updateProducts",

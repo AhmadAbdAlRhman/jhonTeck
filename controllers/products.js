@@ -90,14 +90,19 @@ module.exports.updateProducts = async (req, res, _next) => {
   }
 };
 module.exports.deleteProducts = async (req, res, _next) => {
-  const prodId = req.body.productId;
-  await Products.destroy({ where: { id: prodId } })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(404).json(err);
+  try {
+    const prodId = req.params.productId;
+    let product = await Products.findOne({ where: { id: prodId } });
+    let ImagePath = path.join(__dirname, "..", "public/images/", product.Image);
+    let PdfPath = path.join(__dirname, "..", "public/Document/", product.pdf);
+    await product.destroy().then(async () => {
+      await deleteImage(ImagePath);
+      await deletePdf(PdfPath);
     });
+    res.status(200).json("This product is Successfully deleted");
+  } catch (err) {
+    res.status(404).json(err);
+  }
 };
 module.exports.searchProducts = async (req, res, _next) => {
   const productName = req.params.nameProduct;
