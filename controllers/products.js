@@ -1,9 +1,7 @@
 const Products = require("../modules/products");
 const { Sequelize, Op } = require("sequelize");
 const path = require("path");
-// const util = require("util");
 const fs = require("fs");
-const rimraf = require("rimraf").default;
 async function deleteImage(imagePath) {
   try {
     await fs.unlinkSync(imagePath); // Now this will work with the old version
@@ -64,16 +62,13 @@ module.exports.updateProducts = async (req, res, _next) => {
       return res.status(404).json({ message: "Product not found" });
     }
     if (product.Image !== image) {
-      console.log("Both the image is not similar");
       const imagePath = path.join(
         __dirname,
         "..",
         "public/images/",
         product.Image
       );
-      console.log("Ahmad56");
       await deleteImage(imagePath);
-      console.log("Najeeb64");
     }
     if (product.pdf !== pdf) {
       const pdfPath = path.join(

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const path = require("path");
 const products = require("../controllers/products");
 const FILE_TYPE_MAM = {
   "image/png": "png",
