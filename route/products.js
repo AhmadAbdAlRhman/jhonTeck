@@ -1,5 +1,7 @@
 const express = require("express");
+const path = require("path");
 const router = express.Router();
+const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const products = require("../controllers/products");
 const FILE_TYPE_MAM = {
@@ -25,7 +27,9 @@ const upload = multer({
       }
     },
     filename: (req, file, cb) => {
-      cb(null, file.originalname);
+      const ext = path.extname(file.originalname);
+      cb(null, uuidv4() + ext);
+      // cb(null, file.or iginalname);
     },
   }),
 });
@@ -45,7 +49,7 @@ router.post(
 router.post("/deleteProducts/:productId", products.deleteProducts);
 //update products
 router.post(
-  "/updateProducts",
+  "/updateProducts/:productId",
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "pdf", maxCount: 1 },
@@ -55,5 +59,5 @@ router.post(
 //select from where name = ""
 router.get("/searchProducts/:nameProduct", products.searchProducts);
 //select from product where id = ""
-router.get("/product", products.getOneProduct);
+router.get("/product/:productId", products.getOneProduct);
 module.exports = router;

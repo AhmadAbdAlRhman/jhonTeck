@@ -28,11 +28,13 @@ module.exports.getProducts = async (_req, res, _next) => {
     });
 };
 module.exports.addProducts = async (req, res, _next) => {
+  console.log(req.file);
   const { name, Description } = req.body;
   const image = req.files.image
     ? req.files.image[0].filename
     : req.file.filename;
-  const pdf = req.files.pdf ? req.files.pdf[0].filename : req.file.filename;
+  const pdf = req.files.pdf 
+  ? req.files.pdf[0].filename : req.file.filename;
   const product = new Products({
     name,
     Description,
@@ -49,7 +51,7 @@ module.exports.addProducts = async (req, res, _next) => {
     });
 };
 module.exports.updateProducts = async (req, res, _next) => {
-  const prodId = req.body.prodId;
+  const prodId = req.params.productId;
   const name = req.body.name;
   const Description = req.body.Description;
   const image = req.files.image
@@ -119,8 +121,10 @@ module.exports.searchProducts = async (req, res, _next) => {
     });
 };
 module.exports.getOneProduct = async (req, res, _next) => {
-  const prodId = req.body.productId;
-  await Products.findAll({ where: { id: prodId } })
+  const prodId = req.params.productId;
+  console.log(prodId);
+  
+  await Products.findOne({ where: { id: prodId } })
     .then((result) => {
       res.status(200).json(result);
     })

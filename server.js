@@ -3,10 +3,11 @@ const path = require("path");
 const bodyParser = require("body-parser");
 require("./modules/products");
 const sequelize = require("./utils/database");
+const cors = require("cors");
 const app = express();
 const proRoute = require("./route/products");
 const corsOption = {
-  origin: ["http://localhost:4784", "http://localhost:3001"],
+  origin: ["http://localhost:4784", "http://localhost:3000"],
   methods: ["POST", "GET"],
   credentials: true,
   optionSuccessStatus: 200,
