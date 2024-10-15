@@ -54,15 +54,14 @@ module.exports.updateProducts = async (req, res, _next) => {
   const prodId = req.params.productId;
   const name = req.body.name;
   const Description = req.body.Description;
-  const image = req.files.image
-    ? req.files.image[0].filename
-    : req.file.filename;
-  const pdf = req.files.pdf ? req.files.pdf[0].filename : req.file.filename;
+  
   try {
     let product = await Products.findOne({ where: { id: prodId } });
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+    const image = req.files?.image?.[0]?.filename || product.Image;
+    const pdf = req.files?.pdf?.[0]?.filename || product.pdf;
     if (product.Image !== image) {
       const imagePath = path.join(
         __dirname,
